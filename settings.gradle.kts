@@ -12,4 +12,4 @@ plugins {
 }
 
 includeBuild("lessons")
-includeBuild("otuskotlin-marketplace-be")
+includeBuild("otuskotlin-recipe-book-be")

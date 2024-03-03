@@ -1,4 +1,4 @@
-rootProject.name = "otuskotlin-marketplace-be"
+rootProject.name = "otuskotlin-recipe-book-be"
 
 dependencyResolutionManagement {
     versionCatalogs {
