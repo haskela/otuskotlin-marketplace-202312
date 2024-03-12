@@ -10,9 +10,21 @@
 <details>
 <summary> Визуальная схема фронтенда </summary>
 
+### Главная страница
+
 ![Главная страница](imgs/home-page.png)
+
+### Результаты поиска
+
 ![Результаты поиска](imgs/search-page.png)
-![Рецепт](imgs/recipe-page.png)
+
+### Просмотр рецепта
+
+![Просмотр рецепта](imgs/recipe-page.png)
+
+### Создание рецепта
+
+![Создание рецепта](imgs/new-recipe-page.png)
 </details>
 
 ## Документация
@@ -23,3 +35,8 @@
    - [Пользовательские истории](./docs/marketing/user-stories.md)
    - [Функциональные требования](./docs/marketing/functional-requirements.md)
    - [Нефункциональные требования](./docs/marketing/nonfunctional-requirements.md)
+2. DevOps
+   - [Разворачивание инфраструктуры](./docs/deploy/infrastructure.md)
+3. Architecture
+   - [Компонентная схема](./docs/architecture/component-schema.md)
+   - [Ограниченный контекст и целевая сущность](./docs/architecture/core-entity.md)
