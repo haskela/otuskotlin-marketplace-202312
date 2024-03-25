@@ -1,0 +1,549 @@
+openapi: 3.0.3
+info:
+  title: "Recipe book ${VERSION_APP}"
+  description: This is a website with the collection of delicious and easy-to-follow recipes for all types of cuisines and dietary preferences
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: recipe
+    description: Рецепт
+paths:
+  /recipe/create:
+    post:
+      tags:
+        - recipe
+      summary: Create recipe
+      operationId: recipeCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeCreateResponse'
+  /recipe/read:
+    post:
+      tags:
+        - recipe
+      summary: Read recipe
+      operationId: recipeRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeReadResponse'
+  /recipe/update:
+    post:
+      tags:
+        - recipe
+      summary: Update recipe
+      operationId: recipeUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeUpdateResponse'
+  /recipe/delete:
+    post:
+      tags:
+        - recipe
+      summary: Delete recipe
+      operationId: recipeDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDeleteResponse'
+  /recipe/search:
+    post:
+      tags:
+        - recipe
+      summary: Search recipe
+      operationId: recipeSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeSearchResponse'
+
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/RecipeCreateRequest'
+          read:   '#/components/schemas/RecipeReadRequest'
+          update: '#/components/schemas/RecipeUpdateRequest'
+          delete: '#/components/schemas/RecipeDeleteRequest'
+          search: '#/components/schemas/RecipeSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/RecipeCreateResponse'
+          read:   '#/components/schemas/RecipeReadResponse'
+          update: '#/components/schemas/RecipeUpdateResponse'
+          delete: '#/components/schemas/RecipeDeleteResponse'
+          search: '#/components/schemas/RecipeSearchResponse'
+
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+    RecipeId:
+      type: string
+      description: Идентификатор объявления
+    RecipeLock:
+      type: string
+      description: Версия оптимистичной блокировки
+    IngredientId:
+      type: string
+      description: Идентификатор ингредиента
+    InstructionId:
+      type: string
+      description: Идентификатор шага приготовления
+
+    BaseRecipe:
+      type: object
+      description: Объект рецепта описывает свойства, одинаковые для create и update
+      properties:
+        title:
+          type: string
+          description: Заголовок рецепта
+        description:
+          type: string
+          description: Описание рецепта
+        cookingTime:
+          type: integer
+          description: Длительность приготовления в минутах
+        servingSize:
+          type: integer
+          description: Размер порции
+        category:
+          $ref: '#/components/schemas/Category'
+        cuisine:
+          $ref: '#/components/schemas/Cuisine'
+        visibility:
+          $ref: '#/components/schemas/RecipeVisibility'
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseIngredient'
+        instructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseInstruction'
+
+    Category:
+      type: string
+      description: 'Принадлежность к кухне'
+      enum:
+        - breakfast
+        - lunch
+        - dinner
+
+    Cuisine:
+      type: string
+      description: ''
+      enum:
+        - Russian
+        - Italian
+        - Chinese
+        - Mexican
+        - French
+        - Indian
+        - Japanese
+        - Thai
+        - Greek
+        - American
+        - Spanish
+
+    RecipeVisibility:
+      type: string
+      description: 'Тип видимости рецепта. Возможные значения: видит только владелец, только зарегистрированный в системе пользователь, видно всем'
+      enum:
+        - ownerOnly
+        - registeredOnly
+        - public
+
+    IngredientUnit:
+      type: string
+      description: 'Единица измерения ингредиента'
+      enum:
+        - item
+        - сup
+        - teaspoon
+        - tablespoon
+        - milliliter
+        - liter
+        - gram
+        - kilogram
+        - handful
+        - pinch
+
+    BaseIngredient:
+      type: object
+      description: Объект ингредиента рецепта описывает свойства, одинаковые для create и update
+      properties:
+        title:
+          type: string
+          description: Название ингредиента
+        unit:
+          $ref: '#/components/schemas/IngredientUnit'
+        count:
+          type: integer
+          description: Количество в единицах измерения ингредиента
+        isVegetarian:
+          type: boolean
+          description: Признак животного происхождения ингредиента
+
+    IngredientObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseIngredient'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/IngredientId'
+
+    BaseInstruction:
+      type: object
+      description: Объект шага приготовления рецепта описывает свойства, одинаковые для create и update
+      properties:
+        title:
+          type: string
+          description: Название шага приготовления
+        order:
+          type: integer
+          description: Порядковый номер шага приготовления
+        description:
+          type: string
+          description: Описание действия
+        photo:
+          type: string
+          format: binary
+          description: Фотоизображение шага приготовления
+
+    InstructionObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseInstruction'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/InstructionId'
+
+    RecipeCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseRecipe'
+
+    RecipeCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RecipeRequestDebug'
+        - type: object
+          properties:
+            recipe:
+              $ref: '#/components/schemas/RecipeCreateObject'
+
+    RecipeReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/RecipeId'
+
+    RecipeReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RecipeRequestDebug'
+        - type: object
+          properties:
+            recipe:
+              $ref: '#/components/schemas/RecipeReadObject'
+
+    RecipeUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseRecipe'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/RecipeId'
+            lock:
+              $ref: '#/components/schemas/RecipeLock'
+        - type: object
+          properties:
+            ingredients:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngredientObject'
+            instructions:
+              type: array
+              items:
+                $ref: '#/components/schemas/InstructionObject'
+
+    RecipeUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RecipeRequestDebug'
+        - type: object
+          properties:
+            recipe:
+              $ref: '#/components/schemas/RecipeUpdateObject'
+
+    RecipeDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/RecipeId'
+            lock:
+              $ref: '#/components/schemas/RecipeLock'
+
+    RecipeDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RecipeRequestDebug'
+        - type: object
+          properties:
+            recipe:
+              $ref: '#/components/schemas/RecipeDeleteObject'
+
+    RecipeSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка, которая будет искаться в рецептах
+
+    RecipeSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/RecipeRequestDebug'
+        - type: object
+          properties:
+            recipeFilter:
+              $ref: '#/components/schemas/RecipeSearchFilter'
+
+    RecipeResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseRecipe'
+        - type: object
+          properties:
+            ingredients:
+              type: array
+              items:
+                $ref: '#/components/schemas/IngredientObject'
+            instructions:
+              type: array
+              items:
+                $ref: '#/components/schemas/InstructionObject'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/RecipeId'
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/RecipeLock'
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/RecipePermissions'
+
+    RecipePermissions:
+      type: string
+      description: Доступы для пользователя для операций над рецептом
+      enum:
+        - read
+        - update
+        - delete
+        - makeVisiblePublic
+        - makeVisibleOwn
+        - makeVisibleGroup
+
+    RecipeResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом рецепта
+          properties:
+            recipe:
+              $ref: '#/components/schemas/RecipeResponseObject'
+
+    RecipeResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            recipes:
+              type: array
+              items:
+                $ref: '#/components/schemas/RecipeResponseObject'
+
+    RecipeCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/RecipeResponseSingle'
+
+    RecipeReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/RecipeResponseSingle'
+
+    RecipeUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/RecipeResponseSingle'
+
+    RecipeDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/RecipeResponseSingle'
+
+    RecipeSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/RecipeResponseMulti'
+
+    # STUBS ======================
+    RecipeRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    RecipeRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/RecipeDebug'
+
+    RecipeDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/RecipeRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/RecipeRequestDebugStubs'
+
+    RecipeRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badRecipeId
+        - badRecipeTitle
+        - badRecipeDescription
+        - badVisibility
+        - badCookingTime
+        - badServingSize
+        - badCategory
+        - badCuisine
+        - emptyIngredients
+        - emptyInstructions
+        - badIngredientId
+        - badIngredientTitle
+        - badIngredientDescription
+        - badInstructionId
+        - badInstructionTitle
+        - badInstructionDescription
+        - badIsVegetarian
+        - badUnit
+        - badCount
+        - badOrder
+        - badPhoto
+        - cannotDelete
+        - badSearchString

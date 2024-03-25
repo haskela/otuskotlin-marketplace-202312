@@ -1,6 +1,9 @@
 [versions]
 kotlin = "1.9.22"
 binary-compability-validator = "0.13.2"
+openapi-generator = "7.3.0"
+jackson = "2.16.1"
+kotest = "5.8.0"
 
 jvm-compiler = "11"
 jvm-language = "17"
@@ -8,7 +11,19 @@ jvm-language = "17"
 [libraries]
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-binary-compatibility-validator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binary-compability-validator" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+
+# Testing
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+
+[bundles]
+kotest = ["kotest-junit5", "kotest-core", "kotest-datatest", "kotest-property"]
 
 [plugins]
 kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin"}
 kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
+openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }

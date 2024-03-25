@@ -30,13 +30,13 @@
 ## Документация
 
 1. Маркетинг и аналитика
-   - [Целевая аудитория](./docs/marketing/target-audience.md)
-   - [Заинтересанты](./docs/marketing/stakeholders.md)
-   - [Пользовательские истории](./docs/marketing/user-stories.md)
-   - [Функциональные требования](./docs/marketing/functional-requirements.md)
-   - [Нефункциональные требования](./docs/marketing/nonfunctional-requirements.md)
+   - [Целевая аудитория](docs/marketing/target-audience.md)
+   - [Заинтересанты](docs/marketing/stakeholders.md)
+   - [Пользовательские истории](docs/marketing/user-stories.md)
+   - [Функциональные требования](docs/marketing/functional-requirements.md)
+   - [Нефункциональные требования](docs/marketing/nonfunctional-requirements.md)
 2. DevOps
-   - [Разворачивание инфраструктуры](./docs/deploy/infrastructure.md)
+   - [Разворачивание инфраструктуры](docs/deploy/infrastructure.md)
 3. Architecture
-   - [Компонентная схема](./docs/architecture/component-schema.md)
-   - [Ограниченный контекст и целевая сущность](./docs/architecture/core-entity.md)
+   - [Компонентная схема](docs/architecture/component-schema.md)
+   - [Ограниченный контекст и целевая сущность](docs/architecture/core-entity.md)

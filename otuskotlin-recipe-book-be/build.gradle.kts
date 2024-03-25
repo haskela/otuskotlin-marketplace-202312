@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
-group = "com.otus.otuskotlin.marketplace"
+group = "ru.otus.otuskotlin.recipe.book"
 version = "0.0.1"
 
 subprojects {
@@ -14,18 +14,16 @@ subprojects {
     version = rootProject.version
 }
 
+ext {
+    val specDir = layout.projectDirectory.dir("../specs")
+    set("spec-v1", specDir.file("specs-recipe-v1.yaml").toString())
+}
+
 tasks {
-    create("build") {
-        group = "build"
-        dependsOn(project(":otuskotlin-recipe-book-tmp").getTasksByName("build",false))
-    }
-    create("check") {
-        group = "verification"
-        subprojects.forEach { proj ->
-            println("PROJ $proj")
-            proj.getTasksByName("check", false).also {
-                this@create.dependsOn(it)
-            }
+    arrayOf("build", "clean", "check").forEach {tsk ->
+        create(tsk) {
+            group = "build"
+            dependsOn(subprojects.map {  it.getTasksByName(tsk,false)})
         }
     }
 }

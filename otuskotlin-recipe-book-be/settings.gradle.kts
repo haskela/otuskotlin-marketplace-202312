@@ -24,4 +24,4 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-include(":otuskotlin-recipe-book-tmp")
+include(":otuskotlin-recipe-book-api-v1-jackson")
